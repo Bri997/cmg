@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cmg-sensor-deployment
+  labels:
+    app: cmg-sensor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cmg-sensor
+  template:
+    metadata:
+      labels:
+        app: cmg-sensor
+    spec:
+      containers:
+        - name: cmg-sensor
+          image: brian997/python-cmg:v4
+          ports:
+            - containerPort: 5000
+              name: http
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cmg-sensor-service
+spec:
+  selector:
+    app: cmg-sensor
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
